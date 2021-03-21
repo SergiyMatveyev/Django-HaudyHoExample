@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %} {{article.article_title}} {% endblock %}
+
+{% block content %}
+
+    {% if article %}
+
+        <h2>{{article.article_title}}</h2>
+
+        <p>{{article.article_text}}<p>
+
+        <em>{{article.article_publication_date}}</em>
+
+        {% if article.was_published_resently %}
+        
+            New article
+
+        {% endif %}
+
+        <hr>
+
+        {% if lates_comments_list %}
+
+        <ul>
+
+            {% for comment in lates_comments_list %}
+            <li>
+                <p>{{comment.comment_text}}</p>
+                <strong>{{comment.comment_author}}</strong>
+            </li>
+            {% endfor %}
+
+        </ul>
+        
+        {% else %}
+
+            No comments
+
+        {% endif %}
+
+        <hr>
+
+        <form action="{% url 'articles:leave_comment' article.id %}" method="POST">
+
+            {% csrf_token %}
+
+            <input type="text" required placeholder="Your name" name="name"><br/>
+            <textarea name="text" required placeholder="Your text ..." cols="30" rows="10"></textarea><br/>
+            <button type="submit">Submit</button>
+
+        </form>
+
+    {% else %}
+        "Article not found"
+    {% endif %}
+
+{% endblock  %}
